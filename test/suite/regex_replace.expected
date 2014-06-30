@@ -1,0 +1,13 @@
+register functions/regex
+[[0,0.0,0.0],true]
+table_create Entries TABLE_NO_KEY
+[[0,0.0,0.0],true]
+column_create Entries title COLUMN_SCALAR ShortText
+[[0,0.0,0.0],true]
+load --table Entries
+[
+{"title": "groonga and MySQL"}
+]
+[[0,0.0,0.0],1]
+select Entries --output_columns 'regex_replace(title, " (.*) ", " or ")' --command_version 2
+[[0,0.0,0.0],[[[1],[["regex_replace","Object"]],["groonga or MySQL"]]]]
