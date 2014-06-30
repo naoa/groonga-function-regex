@@ -40,18 +40,21 @@ func_regex_extract(grn_ctx *ctx, GNUC_UNUSED int nargs,
   grn_obj *result;
   char *input = GRN_TEXT_VALUE(args[0]);
   char *pattern = GRN_TEXT_VALUE(args[1]);
-
   string s = input;
+  bool ret_ext;
   if (args[2] == NULL) {
-    RE2::Extract(input, pattern, "\\1", &s);
+    ret_ext = RE2::Extract(input, pattern, "\\1", &s);
   } else {
-    RE2::Extract(input, pattern, GRN_TEXT_VALUE(args[2]), &s);
+    ret_ext = RE2::Extract(input, pattern, GRN_TEXT_VALUE(args[2]), &s);
   }
-
-  if ((result = grn_plugin_proc_alloc(ctx, user_data, GRN_DB_LONG_TEXT, 0))) {
-    GRN_TEXT_SET(ctx, result, s.c_str(), strlen(s.c_str()));
+  
+  if (ret_ext) {
+    if ((result = grn_plugin_proc_alloc(ctx, user_data, GRN_DB_LONG_TEXT, 0))) {
+      GRN_TEXT_SET(ctx, result, s.c_str(), strlen(s.c_str()));
+    }
+  } else {
+    result = grn_plugin_proc_alloc(ctx, user_data, GRN_DB_VOID, 0);
   }
-
   return result;
 }
 

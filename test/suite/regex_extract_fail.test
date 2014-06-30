@@ -1,0 +1,11 @@
+register functions/regex
+
+table_create Entries TABLE_NO_KEY
+
+column_create Entries title COLUMN_SCALAR ShortText
+load --table Entries
+[
+{"title": "groonga and MySQL"}
+]
+
+select Entries --output_columns 'regex_extract(title, "<(.*)>", "<extract>\\\\1</extract>")' --command_version 2
